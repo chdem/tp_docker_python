@@ -7,8 +7,8 @@ def main_menu():
         match choice:
             case "1": __show_movies_menu(__read_rows())
             case "2": __getby_title_menu()
-            case "3": __get_under_age()
-            case "4": __get_by_genre()
+            case "3": __get_under_age_menu()
+            case "4": __get_by_genre_menu()
             case "5": __get_between_years()
             case "6": exit()
 
@@ -24,18 +24,22 @@ def __show_movies_menu(rows: list):
     for row in rows:
         print(row)
 
+def __get_by_genre_menu():
+    genre = input("Entrez le genre recherché : ")
+    __show_movies_menu([row for row in __read_rows() if genre == row[3]])
+
+
 def __getby_title_menu():
     title = input("Entrez le nom du film cherché : ")
-    __get_by_title(title)
-
-def __get_by_title(title: str):
     __show_movies_menu([row for row in __read_rows() if title in row[1]])
 
-def __get_under_age():
-    pass
+def __get_under_age_menu():
+    age = input("Entrez l'age minimum : ")
+    if not age.isdigit(): 
+        print("Age invalide")
+        return
+    __show_movies_menu([row for row in __read_rows() if age <= row[4]])
 
-def __get_by_genre():
-    pass
 
 def __get_between_years():
     pass
