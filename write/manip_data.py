@@ -1,10 +1,11 @@
 from exceptions_custom import InvalidTitleException, InvalidYearException,InvalidGenreException, InvalidAgeLimitException
 from models.Movie import Movie
+from enums.Genre import Genre
 import csv
 
 def add_movie(titre, annee_production, genre, age_limite):
     movie = Movie(titre, annee_production, genre, age_limite)
-    movie_file = open("data/movies.csv", "a")
+    movie_file = open("write/data/movies.csv", "a")
     movie_file.write(__format_csv(movie))
 
 def update_movie(id: int, titre, annee_production, genre, age_limite):
@@ -20,7 +21,7 @@ def remove_movie(id: int):
     __write_rows(rows)
 
 def __read_rows():
-    with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
+    with open("write/data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
         return list(reader)
     
@@ -30,7 +31,7 @@ def __write_rows(rows: list):
         writer.writerows(rows)
 
 def __format_csv(movie: Movie, id=None):
-    return f"{id or movie._id},{movie._titre},{movie._annee_production},{movie._age_limite}\n"
+    return f"{id or movie._id},{movie._titre},{movie._annee_production}, {movie._genre.value}, {movie._age_limite}\n"
 
 def main_menu():
     while True:
@@ -95,7 +96,8 @@ def is_valid(function):
                 InvalidGenreException.InvalidGenreException, 
                 InvalidAgeLimitException.InvalidAgeLimitException) as e:
             print(e)
-        except Exception:
+        except Exception as ex:
+            print(ex)
             print("Erreur lamentable, le programme s'arrête")
             exit()
 
@@ -113,9 +115,10 @@ def input_production_year():
         
 def input_production_genre():
     genre = input("Entrez le genre : ")
-    if genre.strip() == "":
-        raise InvalidGenreException.InvalidGenreException()
-    return genre
+    try:
+        return Genre(genre)
+    except ValueError:
+        raise InvalidGenreException.InvalidGenreException
 
 def input_age():
     age = int(input("Entrez l'age minimum : "))

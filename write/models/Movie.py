@@ -1,9 +1,11 @@
+from enums.Genre import Genre
+
 class Movie:
     """ This class represents movie data """
 
     next_id: int = 30
 
-    def __init__(self, titre: str, annee_production: int, genre: str, age_limite: int, is_update: bool =False):
+    def __init__(self, titre: str, annee_production: int, genre: Genre, age_limite: int, is_update: bool =False):
         
         self._titre = titre
         self._annee_production = annee_production
