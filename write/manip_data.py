@@ -1,5 +1,6 @@
 from exceptions_custom import InvalidTitleException, InvalidYearException,InvalidGenreException, InvalidAgeLimitException
 from models.Movie import Movie
+import csv
 
 
 def add_movie(titre, annee_production, genre, age_limite):
@@ -7,9 +8,32 @@ def add_movie(titre, annee_production, genre, age_limite):
     movie_file = open("write/data/movies.csv", "a")
     movie_file.write(__format_csv(movie))
 
+def update_movie(id: int, titre, annee_production, genre, age_limite):
+    movie = Movie(titre, annee_production, genre, age_limite, True)
 
-def __format_csv(movie: Movie):
-    return f"{movie._id},{movie._titre},{movie._annee_production},{movie._age_limite}\n"
+    with open("write/data/movies.csv", "r", newline='', encoding="utf-8") as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+        print(len(rows))
+        print(rows[id])
+        print(__format_csv(movie, id))
+        rows[id] = [id,titre,annee_production,genre,age_limite]
+        print(rows[id])
+
+    with open("write/data/movies.csv", "w", newline='', encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
+
+def __format_csv(movie: Movie, id=None):
+    return f"{id or movie._id},{movie._titre},{movie._annee_production},{movie._age_limite}\n"
+
+
+def modify_movie_menu(id: int):
+    title = is_valid(input_title)
+    year = is_valid(input_production_year)
+    genre = is_valid(input_production_genre)
+    age_limite = is_valid(input_age)
+    update_movie(id, title, year, genre, age_limite)
 
 
 def add_movie_menu():
@@ -58,4 +82,5 @@ def input_age():
     return age
 
 
-add_movie_menu()
+# add_movie_menu()
+modify_movie_menu(2)
