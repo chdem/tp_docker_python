@@ -9,20 +9,25 @@ def add_movie(titre, annee_production, genre, age_limite):
     movie_file.write(__format_csv(movie))
 
 def update_movie(id: int, titre, annee_production, genre, age_limite):
-    movie = Movie(titre, annee_production, genre, age_limite, True)
+        rows = __read_rows()
+        rows[id] = [id,titre,annee_production,genre,age_limite]
+        __write_rows(rows)
 
+def remove_movie(id: int):
+    rows = __read_rows()
+    rows.pop(id)
+    __write_rows(rows)
+
+def __read_rows():
     with open("write/data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
-        rows = list(reader)
-        print(len(rows))
-        print(rows[id])
-        print(__format_csv(movie, id))
-        rows[id] = [id,titre,annee_production,genre,age_limite]
-        print(rows[id])
-
+        return list(reader)
+    
+def __write_rows(rows: list):
     with open("write/data/movies.csv", "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerows(rows)
+
 
 def __format_csv(movie: Movie, id=None):
     return f"{id or movie._id},{movie._titre},{movie._annee_production},{movie._age_limite}\n"
@@ -81,6 +86,3 @@ def input_age():
         raise InvalidAgeLimitException.InvalidAgeLimitException()
     return age
 
-
-# add_movie_menu()
-modify_movie_menu(2)
