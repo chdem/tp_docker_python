@@ -2,6 +2,10 @@ from exceptions_custom import InvalidTitleException, InvalidYearException,Invali
 from models.Movie import Movie
 import csv
 
+def show_movies_menu():
+    rows = __read_rows()
+    for row in rows:
+        print(row)
 
 def add_movie(titre, annee_production, genre, age_limite):
     movie = Movie(titre, annee_production, genre, age_limite)
@@ -27,7 +31,6 @@ def __write_rows(rows: list):
     with open("write/data/movies.csv", "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerows(rows)
-
 
 def __format_csv(movie: Movie, id=None):
     return f"{id or movie._id},{movie._titre},{movie._annee_production},{movie._age_limite}\n"
@@ -86,3 +89,4 @@ def input_age():
         raise InvalidAgeLimitException.InvalidAgeLimitException()
     return age
 
+show_movies_menu()
