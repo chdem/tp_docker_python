@@ -1,4 +1,4 @@
-class InvalidGenreLimitException(Exception):
+class InvalidGenreException(Exception):
 
     def __init__(self, message=None):
         self.message = message or f"Genre invalide"
