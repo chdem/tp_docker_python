@@ -52,7 +52,7 @@ def __get_between_years_menu():
     pass
 
 def __read_rows():
-    with open("read/data/movies.csv", "r", newline='', encoding="utf-8") as f:
+    with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
         return list(reader)
 

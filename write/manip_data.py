@@ -20,12 +20,12 @@ def remove_movie(id: int):
     __write_rows(rows)
 
 def __read_rows():
-    with open("write/data/movies.csv", "r", newline='', encoding="utf-8") as f:
+    with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
         return list(reader)
     
 def __write_rows(rows: list):
-    with open("write/data/movies.csv", "w", newline='', encoding="utf-8") as f:
+    with open("data/movies.csv", "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerows(rows)
 
@@ -49,7 +49,7 @@ def show_choices():
     print("2. Ajouter un film")
     print("3. Modifier un film")
     print("4. Supprimer un film")
-    print("4. Exit")
+    print("5. Exit")
 
 def show_movies_menu():
     rows = __read_rows()
