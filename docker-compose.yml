@@ -1,0 +1,18 @@
+services:
+  read:
+    build: ./read
+    container_name: read
+    restart: always
+    volumes:
+      - python-movie-data:/data
+ 
+ 
+  write:
+    build: ./write
+    container_name: write
+    volumes:
+      - python-movie-data:/data
+    restart: always
+ 
+volumes:
+  python-movie-data:

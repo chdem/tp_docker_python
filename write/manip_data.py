@@ -4,7 +4,7 @@ import csv
 
 def add_movie(titre, annee_production, genre, age_limite):
     movie = Movie(titre, annee_production, genre, age_limite)
-    movie_file = open("write/data/movies.csv", "a")
+    movie_file = open("data/movies.csv", "a")
     movie_file.write(__format_csv(movie))
 
 def update_movie(id: int, titre, annee_production, genre, age_limite):
