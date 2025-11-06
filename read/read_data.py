@@ -9,7 +9,7 @@ def main_menu():
             case "2": __getby_title_menu()
             case "3": __get_under_age_menu()
             case "4": __get_by_genre_menu()
-            case "5": __get_between_years()
+            case "5": __get_between_years_menu()
             case "6": exit()
 
 def show_choices():
@@ -38,10 +38,17 @@ def __get_under_age_menu():
     if not age.isdigit(): 
         print("Age invalide")
         return
-    __show_movies_menu([row for row in __read_rows() if age <= row[4]])
+    __show_movies_menu([row for row in __read_rows() if int(age) <= int(row[4])])
 
 
-def __get_between_years():
+def __get_between_years_menu():
+    year_begin = input("Entrez l'année à partir de laquelle vous voulez chercher : ")
+    year_end = input("Entrez l'année jusqu'à laquelle vous voulez chercher : ")
+    if not year_begin.isdigit() or not year_end.isdigit():
+        print("Années entrées invalides !")
+        return
+    __show_movies_menu([row for row in __read_rows() if row[2].isdigit() and int(year_begin) <= int(row[2]) <= int(year_end)])
+
     pass
 
 def __read_rows():
