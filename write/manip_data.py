@@ -12,30 +12,34 @@ def add_movie(titre, annee_production, genres, age_limite):
     movie_file = open("data/movies.csv", "a")
     movie_file.write(__format_csv(movie))
 
-def update_movie(id: int, titre, annee_production, genre, age_limite):
+def update_movie(id: int, titre, annee_production, genres, age_limite):
         rows = __read_rows()
-        rows[id] = [id,titre,annee_production,genre,age_limite]
+        rows[id - 1] = [id,titre,annee_production,genres,age_limite]
         __write_rows(rows)
 
 def remove_movie(id: int):
     rows = __read_rows()
-    for i, row in row:
-        if row[0] == id - 1:
+    for i, row in enumerate(rows):
+        if int(row[0]) == id:
             rows.pop(i)
+            break
     __write_rows(rows)
 
 def __read_rows():
     with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
-        return list(reader)
+        movies = list(reader)
+        movies.pop(0)
+        return movies
     
 def __write_rows(rows: list):
     with open("data/movies.csv", "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
+        writer.writerow("id,titre,annee_production,genre,age_limite")
         writer.writerows(rows)
 
 def __format_csv(movie: Movie, id=None):
-    return f"{id or movie._id},{movie._titre},{movie._annee_production}, {__format_csv_genre(movie._genres)}, {movie._age_limite}\n"
+    return f"{id or movie._id},{movie._titre},{movie._annee_production},{__format_csv_genre(movie._genres)},{movie._age_limite}\n"
 
 def __format_csv_genre(genres: list[Genre]):
     return ";".join(genres)
@@ -72,14 +76,14 @@ def modify_movie_menu():
             pass
         title = is_valid(input_title)
         year = is_valid(input_production_year)
-        genre = is_valid(input_production_genre)
+        genres = is_valid(input_production_genre)
         age_limite = is_valid(input_age)
-        update_movie(int(choice), title, year, genre, age_limite)
+        update_movie(int(choice), title, year, genres, age_limite)
         break
 
 def remove_movie_menu():
     while True: 
-        choice = input("Numéro du film à modifier : ")
+        choice = input("Numéro du film à supprimer : ")
         if not choice.isdigit():
             print("Entrez un numéro de fil valide !")
             pass

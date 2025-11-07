@@ -16,7 +16,7 @@ def main_menu():
 def show_choices():
     print("1. Afficher les films")
     print("2. Récupérer depuis le titre ")
-    print("3. Récupérer les films sous une limite d'âge :")
+    print("3. Récupérer les films au dessus d'une limite d'âge :")
     print("4. Récupérer les films selon un genre")
     print("5. Récupérer les films entre deux années (incluses)")
     print("6. Exit")
@@ -29,7 +29,7 @@ def __get_by_genre_menu(): #TODO controles
         print("Entrez un genre parmi la liste suivante : ")
         for i, g in enumerate(Genre):
             print(f"{i+1} {g.value}")
-        choice = input("Votre choix")
+        choice = input("Votre choix : ")
         genre = Genre.from_index(choice)
         __show_movies_menu([row for row in __read_rows() if genre in row[3]])
 
@@ -56,4 +56,6 @@ def __get_between_years_menu():
 def __read_rows():
     with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
-        return list(reader)
+        movies = list(reader)
+        movies.pop(0)
+        return movies
