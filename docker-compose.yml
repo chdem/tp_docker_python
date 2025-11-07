@@ -1,18 +1,21 @@
 services:
   read:
-    build: ./read
+    build: 
+      context: .
+      dockerfile: read/Dockerfile
     container_name: read
     restart: always
     volumes:
-      - python-movie-data:/data
- 
+      - python-movie-data:/app/read/data 
  
   write:
-    build: ./write
+    build: 
+      context: .
+      dockerfile: write/Dockerfile
     container_name: write
     volumes:
-      - python-movie-data:/data
+      - python-movie-data:/app/write/data
     restart: always
- 
+
 volumes:
   python-movie-data:

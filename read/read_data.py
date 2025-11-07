@@ -1,4 +1,5 @@
 import csv
+from common.enums.Genre import Genre
 
 def main_menu():
     while True:
@@ -24,9 +25,13 @@ def __show_movies_menu(rows: list):
     for row in rows:
         print(row)
 
-def __get_by_genre_menu():
-    genre = input("Entrez le genre recherché : ")
-    __show_movies_menu([row for row in __read_rows() if genre == row[3]])
+def __get_by_genre_menu(): #TODO controles
+        print("Entrez un genre parmi la liste suivante : ")
+        for i, g in enumerate(Genre):
+            print(f"{i+1} {g.value}")
+        choice = input("Votre choix")
+        genre = Genre.from_index(choice)
+        __show_movies_menu([row for row in __read_rows() if genre in row[3]])
 
 
 def __getby_title_menu():
@@ -40,7 +45,6 @@ def __get_under_age_menu():
         return
     __show_movies_menu([row for row in __read_rows() if int(age) <= int(row[4])])
 
-
 def __get_between_years_menu():
     year_begin = input("Entrez l'année à partir de laquelle vous voulez chercher : ")
     year_end = input("Entrez l'année jusqu'à laquelle vous voulez chercher : ")
@@ -49,11 +53,7 @@ def __get_between_years_menu():
         return
     __show_movies_menu([row for row in __read_rows() if row[2].isdigit() and int(year_begin) <= int(row[2]) <= int(year_end)])
 
-    pass
-
 def __read_rows():
     with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
         return list(reader)
-
-main_menu()

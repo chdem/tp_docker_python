@@ -1,15 +1,15 @@
-from exceptions_custom.InvalidAgeLimitException import InvalidAgeLimitException
-from exceptions_custom.InvalidGenreException import InvalidGenreException
-from exceptions_custom.InvalidTitleException import InvalidTitleException
-from exceptions_custom.InvalidYearException import InvalidYearException
+from common.exceptions_custom.InvalidAgeLimitException import InvalidAgeLimitException
+from common.exceptions_custom.InvalidGenreException import InvalidGenreException
+from common.exceptions_custom.InvalidTitleException import InvalidTitleException
+from common.exceptions_custom.InvalidYearException import InvalidYearException
 
-from models.Movie import Movie
-from enums.Genre import Genre
+from common.models.Movie import Movie
+from common.enums.Genre import Genre
 import csv
 
-def add_movie(titre, annee_production, genre, age_limite):
-    movie = Movie(titre, annee_production, genre, age_limite)
-    movie_file = open("write/data/movies.csv", "a")
+def add_movie(titre, annee_production, genres, age_limite):
+    movie = Movie(titre, annee_production, genres, age_limite)
+    movie_file = open("data/movies.csv", "a")
     movie_file.write(__format_csv(movie))
 
 def update_movie(id: int, titre, annee_production, genre, age_limite):
@@ -25,7 +25,7 @@ def remove_movie(id: int):
     __write_rows(rows)
 
 def __read_rows():
-    with open("write/data/movies.csv", "r", newline='', encoding="utf-8") as f:
+    with open("data/movies.csv", "r", newline='', encoding="utf-8") as f:
         reader = csv.reader(f)
         return list(reader)
     
@@ -35,7 +35,10 @@ def __write_rows(rows: list):
         writer.writerows(rows)
 
 def __format_csv(movie: Movie, id=None):
-    return f"{id or movie._id},{movie._titre},{movie._annee_production}, {movie._genre.value}, {movie._age_limite}\n"
+    return f"{id or movie._id},{movie._titre},{movie._annee_production}, {__format_csv_genre(movie._genres)}, {movie._age_limite}\n"
+
+def __format_csv_genre(genres: list[Genre]):
+    return ";".join(genres)
 
 def main_menu():
     while True:
@@ -86,10 +89,10 @@ def remove_movie_menu():
 def add_movie_menu():
     title = is_valid(input_title)
     year = is_valid(input_production_year)
-    genre = is_valid(input_production_genre)
+    genres = is_valid(input_production_genre)
     age_limite = is_valid(input_age)
 
-    add_movie(title, year, genre, age_limite)
+    add_movie(title, year, genres, age_limite)
 
 def is_valid(function):
     while True:
@@ -118,11 +121,19 @@ def input_production_year():
     return prod_year
         
 def input_production_genre():
-    genre = input("Entrez le genre : ")
-    try:
-        return Genre(genre)
-    except ValueError:
-        raise InvalidGenreException()
+    genres: list[Genre] = []
+    while True:
+        print("Entrez un genre parmi la liste suivante : ")
+        for i, g in enumerate(Genre):
+            print(f"{i+1} {g.value}")
+        if genres: print("0 Quitter")
+
+        choice = input("Votre choix : ") 
+        if choice == "0": break
+
+        genres.append(Genre.from_index(choice))
+    return genres
+
 
 def input_age():
     age = int(input("Entrez l'age minimum : "))
