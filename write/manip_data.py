@@ -1,4 +1,8 @@
-from exceptions_custom import InvalidTitleException, InvalidYearException,InvalidGenreException, InvalidAgeLimitException
+from exceptions_custom.InvalidAgeLimitException import InvalidAgeLimitException
+from exceptions_custom.InvalidGenreException import InvalidGenreException
+from exceptions_custom.InvalidTitleException import InvalidTitleException
+from exceptions_custom.InvalidYearException import InvalidYearException
+
 from models.Movie import Movie
 from enums.Genre import Genre
 import csv
@@ -91,10 +95,10 @@ def is_valid(function):
     while True:
         try:
             return function()  
-        except (InvalidTitleException.InvalidTitleException,
-                InvalidYearException.InvalidYearException, 
-                InvalidGenreException.InvalidGenreException, 
-                InvalidAgeLimitException.InvalidAgeLimitException) as e:
+        except (InvalidTitleException,
+                InvalidYearException, 
+                InvalidGenreException, 
+                InvalidAgeLimitException) as e:
             print(e)
         except Exception as ex:
             print(ex)
@@ -104,13 +108,13 @@ def is_valid(function):
 def input_title():
     title = input("Entrez un titre de film : ")
     if title.strip() == "":
-        raise InvalidTitleException.InvalidTitleException()
+        raise InvalidTitleException()
     return title
 
 def input_production_year():
     prod_year = int(input("Entrez l'année de sortie : "))
     if not (1800 < prod_year <= 2025) :
-        raise InvalidYearException.InvalidYearException()
+        raise InvalidYearException()
     return prod_year
         
 def input_production_genre():
@@ -118,10 +122,10 @@ def input_production_genre():
     try:
         return Genre(genre)
     except ValueError:
-        raise InvalidGenreException.InvalidGenreException
+        raise InvalidGenreException()
 
 def input_age():
     age = int(input("Entrez l'age minimum : "))
     if not (0 < age <= 18):
-        raise InvalidAgeLimitException.InvalidAgeLimitException()
+        raise InvalidAgeLimitException()
     return age
